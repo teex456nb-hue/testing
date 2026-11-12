@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MTA Ukraine Role Play</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0C0F13; --bg2:#11151B; --surface:#151A21; --surface2:#1C232C;
+  --line:#2A333F; --line2:#3A4553; --text:#EEF1F4; --muted:#A2ACB8;
+  --accent:#F5C518; --zsu:#A8C040; --police:#4C8DFF; --medic:#FF6B6B;
+  --cut:polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 'Inter',system-ui,sans-serif;min-height:100vh;display:flex;flex-direction:column}
+h1,h2,h3{margin:0;font-family:'Oswald',Impact,sans-serif;text-transform:uppercase;font-weight:600}
+p{margin:0}
+.wrap{width:100%;max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+.muted{color:var(--muted)}
+.eyebrow{font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+
+/* кнопки и поля */
+.btn{font-family:'Oswald',Impact,sans-serif;font-weight:600;font-size:16px;letter-spacing:.08em;text-transform:uppercase;padding:12px 26px;min-height:48px;border:1px solid transparent;cursor:pointer;color:var(--text);background:transparent;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.btn:hover{filter:brightness(1.12)}
+.btn-primary{background:var(--accent);color:#0C0F13}
+.btn-ghost{border-color:var(--line2)}
+.btn-sm{font-size:14px;padding:8px 16px;min-height:44px;letter-spacing:.1em}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-size:14px;color:var(--muted)}
+input,textarea{width:100%;min-height:48px;padding:10px 14px;background:var(--bg);border:1px solid var(--line2);color:var(--text);font:inherit}
+textarea{min-height:96px;resize:vertical}
+.err{color:#FF8A8A;font-size:14px;min-height:20px}
+
+/* шапка */
+.top{border-bottom:1px solid var(--line)}
+.topin{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding-top:20px;padding-bottom:20px}
+.brand{display:flex;align-items:center;gap:12px;background:none;border:0;color:inherit;cursor:pointer;text-align:left;padding:0}
+.brand svg{color:var(--accent)}
+.brand b{display:block;font-family:'Oswald',sans-serif;font-size:22px;letter-spacing:.06em;text-transform:uppercase;line-height:1.05}
+.brand small{display:block;font-size:12px;letter-spacing:.28em;color:var(--muted);text-transform:uppercase}
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav button{font-family:'Oswald',sans-serif;font-weight:500;font-size:15px;letter-spacing:.08em;text-transform:uppercase;padding:10px 18px;min-height:44px;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer}
+nav button:hover{filter:brightness(1.2)}
+nav button[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:#0C0F13}
+
+/* страницы */
+.page{display:none}
+.page.active{display:block}
+.section{padding-top:56px;padding-bottom:72px;display:flex;flex-direction:column;gap:32px}
+.pagetitle{display:flex;flex-direction:column;gap:8px;max-width:640px}
+.pagetitle h1{font-size:clamp(36px,6vw,56px);font-weight:700}
+.card{background:var(--surface);padding:28px;clip-path:var(--cut);display:flex;flex-direction:column;gap:14px}
+.row{display:flex;flex-wrap:wrap;gap:20px}
+.row>*{flex:1 1 300px;min-width:0}
+
+/* главная */
+.hero{display:flex;flex-wrap:wrap;align-items:center;gap:48px;padding-top:clamp(40px,7vw,88px);padding-bottom:clamp(40px,7vw,88px)}
+.hero-text{flex:1 1 520px;display:flex;flex-direction:column;gap:24px;min-width:0}
+.tag{align-self:flex-start;font-size:13px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);border:1px solid var(--line);padding:6px 12px}
+.hero h1{font-size:clamp(44px,8vw,88px);line-height:.98;font-weight:700}
+.hero h1 span{color:var(--accent)}
+.hero p{font-size:18px;color:var(--muted);max-width:560px}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.server{flex:1 1 340px}
+.server h3{font-size:14px;letter-spacing:.2em;color:var(--muted);font-weight:500}
+.kv{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid var(--line)}
+.kv span:first-child{color:var(--muted)}
+.kv span:last-child{font-weight:600;text-align:right;overflow-wrap:anywhere}
+.fcard h3{font-size:28px}
+.fcard svg{width:48px;height:48px}
+.fcard .ft{font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+.fcard p{flex:1;color:var(--muted)}
+.steps{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.steps .wrap{padding-top:64px;padding-bottom:64px;display:flex;flex-direction:column;gap:28px}
+.step b{display:block;font-family:'Oswald',sans-serif;font-size:56px;line-height:1;color:var(--accent)}
+.step h3{font-family:'Inter',sans-serif;text-transform:none;font-size:20px;font-weight:600;margin-top:8px}
+.step p{color:var(--muted);margin-top:6px}
+
+/* фракции */
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tabs button{font-family:'Oswald',sans-serif;font-weight:500;font-size:16px;letter-spacing:.08em;text-transform:uppercase;padding:12px 24px;min-height:48px;border:1px solid var(--fc,var(--line2));background:transparent;color:var(--fc,var(--text));cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--fc,var(--accent));color:#0C0F13}
+.duty{display:flex;gap:12px;align-items:baseline}
+.duty i{font-style:normal;font-weight:600;color:var(--fc)}
+.rank{display:flex;align-items:center;gap:16px;padding:12px 0;border-top:1px solid var(--line)}
+.rank b{font-family:'Oswald',sans-serif;font-size:20px;color:var(--fc);min-width:28px}
+.h3s{font-size:18px;font-weight:500;letter-spacing:.1em;margin-top:8px}
+
+/* донат */
+.price{font-family:'Oswald',sans-serif;font-weight:700;font-size:44px;line-height:1}
+.perk{padding-top:10px;border-top:1px solid var(--line);color:var(--muted)}
+.perks{display:flex;flex-direction:column;gap:10px;flex:1}
+.hot{font-size:12px;letter-spacing:.16em;text-transform:uppercase;background:var(--accent);color:#0C0F13;padding:4px 10px;font-weight:600}
+.pack.hotcard{background:var(--surface2)}
+.pack .top2{display:flex;justify-content:space-between;align-items:center;gap:12px}
+
+/* правила */
+.rule{background:var(--surface);padding:24px;display:flex;gap:20px}
+.rule b{font-family:'Oswald',sans-serif;font-size:32px;line-height:1;color:var(--accent)}
+.rule h3{font-family:'Inter',sans-serif;text-transform:none;font-size:18px;font-weight:600;margin-bottom:6px}
+.rule p{color:var(--muted)}
+
+/* кабинет */
+.auth{max-width:440px;margin:0 auto;width:100%;padding:36px}
+.auth h1{font-size:36px;font-weight:700}
+.badge{font-size:12px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;font-weight:600;border:1px solid var(--line2);color:var(--muted)}
+.badge.ok{color:#9BD65C;border-color:#9BD65C}
+.badge.no{color:#FF8A8A;border-color:#FF8A8A}
+.badge.wait{color:var(--accent);border-color:var(--accent)}
+.line{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.line .ft{font-size:12px;letter-spacing:.2em;text-transform:uppercase;display:block}
+.chead{font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.head2{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.col{display:flex;flex-direction:column;gap:20px}
+.small{font-size:13px;color:var(--muted)}
+
+/* диалог и уведомление */
+dialog{background:var(--surface);color:var(--text);border:1px solid var(--line2);padding:28px;width:min(480px,calc(100% - 32px))}
+dialog::backdrop{background:rgba(0,0,0,.7)}
+dialog form{display:flex;flex-direction:column;gap:16px}
+dialog h2{font-size:26px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--line2);padding:12px 20px;max-width:calc(100% - 32px);opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.show{opacity:1}
+
+footer{margin-top:auto;border-top:1px solid var(--line);padding:32px 0}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:20px}
+footer b{font-family:'Oswald',sans-serif;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap topin">
+    <button class="brand" type="button" data-action="go" data-page="home" aria-label="MTA Ukraine Role Play, на главную">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z"/><path d="M9 11.5l2.2 2.2L15.5 9.5"/></svg>
+      <span><b>MTA Ukraine</b><small>Role Play</small></span>
+    </button>
+    <nav id="nav" aria-label="Главное меню"></nav>
+  </div>
+</header>
+
+<main>
+  <!-- ГЛАВНАЯ -->
+  <section id="page-home" class="page">
+    <div class="wrap hero">
+      <div class="hero-text">
+        <span class="tag">Multi Theft Auto · RP-проект</span>
+        <h1>MTA Ukraine<br><span>Role Play</span></h1>
+        <p>Ролевой проект об Украине. Служи в ЗСУ, патрулируй улицы в полиции или спасай жизни как медик. Выбери фракцию и начни свою историю.</p>
+        <div class="btns">
+          <button class="btn btn-primary" type="button" data-action="go" data-page="factions">Выбрать фракцию</button>
+          <button class="btn btn-ghost" type="button" data-action="go" data-page="cabinet">Личный кабинет</button>
+        </div>
+      </div>
+      <div class="card server">
+        <h3>Статус сервера</h3>
+        <div class="kv"><span>Адрес</span><span data-cfg="address"></span></div>
+        <div class="kv"><span>Онлайн</span><span data-cfg="online"></span></div>
+        <div class="kv"><span>Клиент</span><span data-cfg="version"></span></div>
+        <a class="btn btn-primary" href="#join" data-action="join">Как подключиться</a>
+      </div>
+    </div>
+
+    <div class="wrap" style="padding-bottom:72px;display:flex;flex-direction:column;gap:28px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <span class="eyebrow">Три пути</span>
+        <h2 style="font-size:40px">Выбери свою фракцию</h2>
+      </div>
+      <div class="row">
+        <div class="card fcard" style="--fc:var(--zsu)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--zsu)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 9l7-5 7 5"/><path d="M5 14l7-5 7 5"/><path d="M5 19l7-5 7 5"/></svg>
+          <span class="ft" style="color:var(--zsu)">Фракция 01</span>
+          <h3>ЗСУ</h3>
+          <p>Охрана объектов, учения, сопровождение конвоев и совместные операции с другими службами.</p>
+          <button class="btn btn-sm" type="button" data-action="faction" data-faction="zsu" style="align-self:flex-start;border-color:var(--zsu);color:var(--zsu)">Подробнее</button>
+        </div>
+        <div class="card fcard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--police)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z"/><circle cx="12" cy="11" r="2.5"/></svg>
+          <span class="ft" style="color:var(--police)">Фракция 02</span>
+          <h3>Полиция</h3>
+          <p>Патруль, реагирование на вызовы, задержания и расследование происшествий на улицах города.</p>
+          <button class="btn btn-sm" type="button" data-action="faction" data-faction="police" style="align-self:flex-start;border-color:var(--police);color:var(--police)">Подробнее</button>
+        </div>
+        <div class="card fcard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--medic)" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M10 4h4v6h6v4h-6v6h-4v-6H4v-4h6z"/></svg>
+          <span class="ft" style="color:var(--medic)">Фракция 03</span>
+          <h3>Медики</h3>
+          <p>Выезды скорой помощи, работа в больнице, лечение игроков и эвакуация раненых.</p>
+          <button class="btn btn-sm" type="button" data-action="faction" data-faction="medic" style="align-self:flex-start;border-color:var(--medic);color:var(--medic)">Подробнее</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps" id="join">
+      <div class="wrap">
+        <h2 style="font-size:40px">Как начать играть</h2>
+        <div class="row" style="gap:32px">
+          <div class="step"><b>01</b><h3>Создай аккаунт</h3><p>Зарегистрируйся в личном кабинете и получи доступ к своим персонажам.</p></div>
+          <div class="step"><b>02</b><h3>Выбери фракцию</h3><p>Подай заявку в ЗСУ, полицию или медицинскую службу. Администрация рассмотрит её в кабинете.</p></div>
+          <div class="step"><b>03</b><h3>Подключись к серверу</h3><p>Запусти MTA, добавь сервер по адресу <b style="display:inline;font-size:inherit;font-family:inherit;color:var(--text)" data-cfg="address"></b> и заходи в игру.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ФРАКЦИИ -->
+  <section id="page-factions" class="page"><div class="wrap section" id="factions-root"></div></section>
+
+  <!-- ДОНАТ -->
+  <section id="page-donate" class="page"><div class="wrap section" id="donate-root"></div></section>
+
+  <!-- ПРАВИЛА -->
+  <section id="page-rules" class="page">
+    <div class="wrap section">
+      <div class="pagetitle">
+        <span class="eyebrow">Кодекс игрока</span>
+        <h1>Правила сервера</h1>
+        <p class="muted">Короткая версия основных правил. Полный список: <span data-cfg="rulesLink"></span>.</p>
+      </div>
+      <div class="row" style="gap:16px">
+        <div class="rule" style="flex-basis:340px"><b>1</b><div><h3>RP-поведение</h3><p>Играй роль своего персонажа и веди себя так, как поступил бы человек в этой ситуации.</p></div></div>
+        <div class="rule" style="flex-basis:340px"><b>2</b><div><h3>DM (Death Match)</h3><p>Убийство или нанесение вреда другим игрокам без ролевой причины запрещено.</p></div></div>
+        <div class="rule" style="flex-basis:340px"><b>3</b><div><h3>Метагейминг</h3><p>Персонаж не знает того, что игрок узнал вне игры: из Discord, стрима или чужого голосового чата.</p></div></div>
+        <div class="rule" style="flex-basis:340px"><b>4</b><div><h3>Паурганизм (Powergaming)</h3><p>Нельзя навязывать действия другим игрокам и делать то, что невозможно для персонажа.</p></div></div>
+        <div class="rule" style="flex-basis:340px"><b>5</b><div><h3>Уважение к игрокам</h3><p>Оскорбления, дискриминация и спам в чате наказываются администрацией.</p></div></div>
+        <div class="rule" style="flex-basis:340px"><b>6</b><div><h3>Правила фракций</h3><p>У ЗСУ, полиции и медиков есть свои уставы. Их нарушение ведёт к снятию звания.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- КАБИНЕТ -->
+  <section id="page-cabinet" class="page"><div class="wrap section" id="cabinet-root"></div></section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div style="display:flex;flex-direction:column;gap:6px;max-width:560px">
+      <b>© MTA Ukraine Role Play</b>
+      <span class="small">Некоммерческий фан-проект на платформе Multi Theft Auto. Не связан с Rockstar Games, Вооружёнными Силами Украины и Национальной полицией Украины.</span>
+    </div>
+    <div class="muted" style="display:flex;flex-wrap:wrap;gap:24px">
+      <span>Discord: <span data-cfg="discord"></span></span>
+      <span>Telegram: <span data-cfg="telegram"></span></span>
+    </div>
+  </div>
+</footer>
+
+<dialog id="dlg" aria-modal="true"></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<noscript><p style="padding:24px">Для работы сайта нужен включённый JavaScript.</p></noscript>
+
+<script>
+/* ============================================================
+   НАСТРОЙКИ — правь здесь
+   ============================================================ */
+const CONFIG = {
+  ip: '127.0.0.1',            // адрес твоего MTA-сервера
+  port: '22003',              // порт (22003 — стандартный в MTA)
+  online: '—',                // онлайн (пока вручную; с сайта на чистом HTML его не узнать)
+  version: 'MTA:SA 1.6',
+  discord: '[ССЫЛКА]',
+  telegram: '[ССЫЛКА]',
+  rulesLink: '[ССЫЛКА НА ПРАВИЛА]',
+  currency: '₴',
+  moneyName: 'игровых денег',
+  packages: [
+    { id: 'start',   name: 'Стартовый', price: 100, money: 10000, hot: false,
+      perks: ['Игровые деньги', 'Префикс в чате', 'Доступ к закрытому каналу'] },
+    { id: 'standard',name: 'Стандарт',  price: 250, money: 30000, hot: true,
+      perks: ['Игровые деньги', 'Уникальный скин персонажа', 'Приоритет в очереди на сервер', 'Всё из пакета «Стартовый»'] },
+    { id: 'premium', name: 'Премиум',   price: 500, money: 75000, hot: false,
+      perks: ['Игровые деньги', 'Эксклюзивный транспорт', 'Дополнительный слот персонажа', 'Всё из пакета «Стандарт»'] }
+  ]
+};
+
+const FACTIONS = {
+  zsu: {
+    tab: 'ЗСУ', color: 'var(--zsu)', tag: 'Фракция 01',
+    name: 'Вооружённые силы (ЗСУ)',
+    desc: 'Защита государства: охрана объектов, учения, патрули в зоне ответственности и совместные операции с полицией и медиками.',
+    duties: ['Охрана военных объектов и КПП', 'Учения и полевые задания', 'Конвои и сопровождение техники', 'Взаимодействие с другими службами'],
+    ranks: ['Солдат', 'Старший солдат', 'Младший сержант', 'Сержант', 'Лейтенант', 'Капитан']
+  },
+  police: {
+    tab: 'Полиция', color: 'var(--police)', tag: 'Фракция 02',
+    name: 'Национальная полиция',
+    desc: 'Порядок на улицах города: патрулирование, реагирование на вызовы, работа с нарушителями и расследование происшествий.',
+    duties: ['Патруль и проверка документов', 'Реагирование на вызовы игроков', 'Задержания и допросы', 'Расследование происшествий'],
+    ranks: ['Рядовой', 'Сержант', 'Старший сержант', 'Лейтенант', 'Капитан', 'Майор']
+  },
+  medic: {
+    tab: 'Медики', color: 'var(--medic)', tag: 'Фракция 03',
+    name: 'Медицинская служба',
+    desc: 'Спасение жизней: выезды скорой помощи, работа в больнице, лечение и реанимация игроков, эвакуация раненых.',
+    duties: ['Выезды скорой помощи', 'Лечение и реанимация', 'Работа в больнице', 'Эвакуация раненых вместе с ЗСУ'],
+    ranks: ['Санитар', 'Фельдшер', 'Врач-интерн', 'Врач', 'Старший врач', 'Заведующий отделением']
+  }
+};
+
+/* ============================================================
+   Хранилище (localStorage браузера)
+   ============================================================ */
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Math.random().toString(36).slice(2, 10);
+const today = () => new Date().toLocaleDateString('ru-RU');
+
+const api = async (path, body) => {
+  try {
+    const r = await fetch('/api/' + path, body === undefined ? {} : { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    const d = await r.json().catch(() => ({}));
+    return r.ok ? { ok: true, data: d } : { ok: false, error: d.error || 'Ошибка сервера' };
+  } catch (e) { return { ok: false, error: 'Нет связи с сервером' }; }
+};
+let USER = null;
+const me = () => USER;
+async function loadMe() { const r = await api('me'); USER = r.ok ? r.data.user : null; }
+
+/* ============================================================
+   Интерфейс
+   ============================================================ */
+const PAGES = [
+  ['home', 'Главная'], ['factions', 'Фракции'], ['donate', 'Донат'],
+  ['rules', 'Правила'], ['cabinet', 'Личный кабинет']
+];
+const state = { page: 'home', faction: 'zsu', authTab: 'login' };
+
+function toast(msg) {
+  const t = $('#toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toast.id);
+  toast.id = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+function openDialog(html) { const d = $('#dlg'); d.innerHTML = html; if (!d.open) d.showModal(); }
+function closeDialog() { const d = $('#dlg'); if (d.open) d.close(); }
+
+function go(page) {
+  if (location.hash.slice(1) === page) route(); else location.hash = page;
+}
+
+function route() {
+  let h = location.hash.slice(1) || 'home';
+  let scrollJoin = false;
+  if (h === 'join') { h = 'home'; scrollJoin = true; }
+  if (!PAGES.some(p => p[0] === h)) h = 'home';
+  state.page = h;
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + h));
+  $('#nav').innerHTML = PAGES.map(p =>
+    `<button type="button" data-action="go" data-page="${p[0]}"${p[0] === h ? ' aria-current="page"' : ''}>${p[1]}</button>`).join('');
+  if (h === 'factions') renderFactions();
+  if (h === 'donate') renderDonate();
+  if (h === 'cabinet') loadMe().then(renderCabinet);
+  if (scrollJoin) $('#join').scrollIntoView(); else window.scrollTo(0, 0);
+}
+
+function fillConfig() {
+  const map = {
+    address: CONFIG.ip + ':' + CONFIG.port, online: CONFIG.online, version: CONFIG.version,
+    discord: CONFIG.discord, telegram: CONFIG.telegram, rulesLink: CONFIG.rulesLink
+  };
+  document.querySelectorAll('[data-cfg]').forEach(el => { el.textContent = map[el.dataset.cfg] ?? ''; });
+}
+
+/* ---------- Фракции ---------- */
+function renderFactions() {
+  const f = FACTIONS[state.faction];
+  $('#factions-root').innerHTML = `
+    <div class="pagetitle"><span class="eyebrow">Службы</span><h1>Фракции</h1></div>
+    <div class="tabs" role="tablist" aria-label="Фракции">
+      ${Object.keys(FACTIONS).map(k => `<button type="button" role="tab" style="--fc:${FACTIONS[k].color}" aria-selected="${k === state.faction}" data-action="faction-tab" data-faction="${k}">${FACTIONS[k].tab}</button>`).join('')}
+    </div>
+    <div class="row" style="--fc:${f.color};align-items:flex-start">
+      <div class="card" style="flex:1 1 420px;padding:32px">
+        <span class="eyebrow" style="color:${f.color}">${f.tag}</span>
+        <h2 style="font-size:36px">${f.name}</h2>
+        <p class="muted">${f.desc}</p>
+        <h3 class="h3s">Чем занимаются</h3>
+        ${f.duties.map(d => `<div class="duty"><i>/</i><span>${d}</span></div>`).join('')}
+        <h3 class="h3s">Требования к вступлению</h3>
+        <p class="muted">[УРОВЕНЬ / ЧАСЫ НА СЕРВЕРЕ / ВОЗРАСТ ПЕРСОНАЖА]</p>
+        <button class="btn" type="button" data-action="apply" data-faction="${state.faction}" style="align-self:flex-start;margin-top:8px;background:${f.color};color:#0C0F13">Подать заявку</button>
+      </div>
+      <div class="card" style="flex:1 1 320px;padding:32px;clip-path:none;gap:0">
+        <h3 class="h3s" style="margin:0 0 8px">Звания</h3>
+        ${f.ranks.map((r, i) => `<div class="rank"><b>${String(i + 1).padStart(2, '0')}</b><span>${r}</span></div>`).join('')}
+      </div>
+    </div>`;
+}
+
+/* ---------- Донат ---------- */
+function renderDonate() {
+  $('#donate-root').innerHTML = `
+    <div class="pagetitle">
+      <span class="eyebrow">Поддержка проекта</span><h1>Донат</h1>
+      <p class="muted">Поддержи сервер и получи дополнительные возможности. После оплаты бонусы появятся в личном кабинете.</p>
+    </div>
+    <div class="row">
+      ${CONFIG.packages.map(p => `
+        <div class="card pack${p.hot ? ' hotcard' : ''}" style="gap:16px">
+          <div class="top2"><h2 style="font-size:28px">${esc(p.name)}</h2>${p.hot ? '<span class="hot">Популярный</span>' : ''}</div>
+          <div class="price">${p.price} ${CONFIG.currency}</div>
+          <div class="perks">
+            <div class="perk">${p.money.toLocaleString('ru-RU')} ${CONFIG.moneyName}</div>
+            ${p.perks.slice(1).map(x => `<div class="perk">${esc(x)}</div>`).join('')}
+          </div>
+          <button class="btn ${p.hot ? 'btn-primary' : 'btn-ghost'}" type="button" data-action="buy" data-id="${p.id}">Выбрать пакет</button>
+        </div>`).join('')}
+    </div>
+    <p class="small">Тестовый режим: реальные деньги не списываются. Для настоящей оплаты нужен платёжный сервис и серверная часть.</p>`;
+}
+
+/* ---------- Кабинет ---------- */
+function renderCabinet() {
+  const u = me();
+  $('#cabinet-root').innerHTML = u ? dashboardHtml(u) : authHtml();
+}
+
+function authHtml() {
+  const t = state.authTab, reg = t === 'register';
+  return `
+  <form class="card auth" data-form="${t}" novalidate>
+    <span class="eyebrow">Личный кабинет</span>
+    <h1>${reg ? 'Регистрация' : 'Вход'}</h1>
+    <div class="tabs" role="group" aria-label="Вход или регистрация">
+      <button type="button" aria-selected="${!reg}" data-action="auth-tab" data-tab="login" style="min-height:44px;padding:8px 18px;font-size:14px">Вход</button>
+      <button type="button" aria-selected="${reg}" data-action="auth-tab" data-tab="register" style="min-height:44px;padding:8px 18px;font-size:14px">Регистрация</button>
+    </div>
+    <div class="field"><label for="f-nick">Игровой ник</label><input id="f-nick" name="nick" type="text" autocomplete="username" maxlength="20"></div>
+    <div class="field"><label for="f-pass">Пароль</label><input id="f-pass" name="pass" type="password" autocomplete="${reg ? 'new-password' : 'current-password'}"></div>
+    ${reg ? '<div class="field"><label for="f-pass2">Повтори пароль</label><input id="f-pass2" name="pass2" type="password" autocomplete="new-password"></div>' : ''}
+    <p class="err" role="alert" id="form-err"></p>
+    <button class="btn btn-primary" type="submit">${reg ? 'Создать аккаунт' : 'Войти'}</button>
+    <p class="small">Первый зарегистрированный аккаунт получает права администратора.</p>
+  </form>`;
+}
+
+function badge(status) {
+  const m = { pending: ['wait', 'На рассмотрении'], accepted: ['ok', 'Принята'], rejected: ['no', 'Отклонена'] }[status];
+  return `<span class="badge ${m[0]}">${m[1]}</span>`;
+}
+
+function dashboardHtml(u) {
+  const keys = Object.keys(FACTIONS);
+  const chars = keys.map(k => {
+    const f = FACTIONS[k];
+    const c = u.chars.find(x => x.faction === k);
+    const pend = u.apps.find(x => x.faction === k && x.status === 'pending');
+    let mid, btn = '';
+    if (c) mid = `${esc(c.name)} · ${f.ranks[c.rank]}`;
+    else if (pend) mid = 'Заявка на рассмотрении';
+    else { mid = 'Слот свободен'; btn = `<button class="btn btn-sm" type="button" data-action="apply" data-faction="${k}" style="border-color:${f.color};color:${f.color}">Подать заявку</button>`; }
+    return `<div class="line"><div><span class="ft" style="color:${f.color}">${f.tab}</span>${mid}</div>${btn}</div>`;
+  }).join('');
+
+  const apps = u.apps.length
+    ? [...u.apps].reverse().map(a => `<div class="line"><div><span class="ft muted">${FACTIONS[a.faction].tab} · ${a.date}</span>${esc(a.name)}, ${a.age} лет</div>${badge(a.status)}</div>`).join('')
+    : '<div class="line muted">Заявок пока нет.</div>';
+
+  const dons = u.donations.length
+    ? [...u.donations].reverse().map(d => `<div class="line"><div><span class="ft muted">${d.date}</span>${esc(d.name)}</div><span>${d.price} ${CONFIG.currency}</span></div>`).join('')
+    : '<div class="line muted">Пока пусто. Здесь появятся твои покупки.</div>';
+
+  let admin = '';
+  if (u.admin) {
+    const pend = u.pending || [];
+    admin = `
+    <div class="card" style="clip-path:none">
+      <span class="chead">Панель администратора · заявки</span>
+      ${pend.length ? pend.map(p => `
+        <div class="line" style="align-items:flex-start">
+          <div style="flex:1 1 260px;min-width:0"><span class="ft" style="color:${FACTIONS[p.a.faction].color}">${FACTIONS[p.a.faction].tab} · аккаунт ${esc(p.nick)}</span>
+            <b>${esc(p.a.name)}</b>, ${p.a.age} лет<br><span class="muted" style="overflow-wrap:anywhere">${esc(p.a.about) || 'Без описания'}</span></div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-sm btn-primary" type="button" data-action="decide" data-key="${p.k}" data-id="${p.a.id}" data-decision="accepted">Принять</button>
+            <button class="btn btn-sm btn-ghost" type="button" data-action="decide" data-key="${p.k}" data-id="${p.a.id}" data-decision="rejected">Отклонить</button>
+          </div>
+        </div>`).join('') : '<div class="line muted">Новых заявок нет.</div>'}
+    </div>`;
+  }
+
+  return `
+  <div class="head2">
+    <div style="display:flex;flex-direction:column;gap:8px"><span class="eyebrow">Добро пожаловать, ${esc(u.nick)}</span><h1 style="font-size:clamp(36px,6vw,56px);font-weight:700">Личный кабинет</h1></div>
+    <button class="btn btn-ghost" type="button" data-action="logout">Выйти</button>
+  </div>
+  <div class="row" style="align-items:flex-start">
+    <div class="card" style="flex:1 1 280px;gap:0">
+      <span class="chead" style="margin-bottom:8px">Профиль</span>
+      <div class="kv"><span>Ник</span><span>${esc(u.nick)}</span></div>
+      <div class="kv"><span>Роль</span><span>${u.admin ? 'Администратор' : 'Игрок'}</span></div>
+      <div class="kv"><span>Регистрация</span><span>${u.created}</span></div>
+      <div class="kv"><span>Баланс</span><span>${u.balance.toLocaleString('ru-RU')} ${CONFIG.moneyName}</span></div>
+      <button class="btn btn-primary" type="button" data-action="go" data-page="donate" style="margin-top:12px">Пополнить</button>
+    </div>
+    <div class="col" style="flex:2 1 420px">
+      <div class="card" style="clip-path:none;gap:0"><span class="chead" style="margin-bottom:8px">Мои персонажи</span>${chars}</div>
+      ${admin}
+      <div class="card" style="clip-path:none;gap:0"><span class="chead" style="margin-bottom:8px">Мои заявки</span>${apps}</div>
+      <div class="card" style="clip-path:none;gap:0"><span class="chead" style="margin-bottom:8px">История донатов</span>${dons}</div>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   Действия
+   ============================================================ */
+async function doAuth(form) {
+  const nick = form.nick.value.trim(), pass = form.pass.value, err = $('#form-err');
+  const reg = form.dataset.form === 'register';
+  if (reg && pass !== form.pass2.value) { err.textContent = 'Пароли не совпадают.'; return; }
+  const r = await api(reg ? 'register' : 'login', { nick, pass });
+  if (!r.ok) { err.textContent = r.error; return; }
+  USER = r.data.user;
+  if (reg) toast('Аккаунт создан');
+  renderCabinet();
+}
+
+function applyDialog(fk) {
+  const u = me();
+  if (!u) { toast('Сначала войди в личный кабинет'); state.authTab = 'login'; return go('cabinet'); }
+  if (u.chars.some(c => c.faction === fk)) return toast('У тебя уже есть персонаж в этой фракции');
+  if (u.apps.some(a => a.faction === fk && a.status === 'pending')) return toast('Заявка уже на рассмотрении');
+  openDialog(`
+    <form data-form="apply" data-faction="${fk}" novalidate>
+      <h2>Заявка: ${FACTIONS[fk].tab}</h2>
+      <div class="field"><label for="a-name">Имя и фамилия персонажа</label><input id="a-name" name="name" maxlength="40"></div>
+      <div class="field"><label for="a-age">Возраст персонажа</label><input id="a-age" name="age" type="number" min="18" max="80" value="25"></div>
+      <div class="field"><label for="a-about">О персонаже</label><textarea id="a-about" name="about" maxlength="500"></textarea></div>
+      <p class="err" role="alert" id="dlg-err"></p>
+      <div class="btns"><button class="btn btn-primary" type="submit">Отправить</button><button class="btn btn-ghost" type="button" data-action="close">Отмена</button></div>
+    </form>`);
+}
+
+function buyDialog(id) {
+  const u = me();
+  if (!u) { toast('Сначала войди в личный кабинет'); state.authTab = 'login'; return go('cabinet'); }
+  const p = CONFIG.packages.find(x => x.id === id);
+  openDialog(`
+    <form data-form="buy" data-id="${id}">
+      <h2>Пакет «${esc(p.name)}»</h2>
+      <p>К оплате: <b>${p.price} ${CONFIG.currency}</b>. Ты получишь ${p.money.toLocaleString('ru-RU')} ${CONFIG.moneyName}.</p>
+      <p class="small">Тестовый режим: деньги не списываются, бонус начисляется сразу.</p>
+      <div class="btns"><button class="btn btn-primary" type="submit">Подтвердить</button><button class="btn btn-ghost" type="button" data-action="close">Отмена</button></div>
+    </form>`);
+}
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-action]');
+  if (!el) return;
+  const d = el.dataset;
+  switch (d.action) {
+    case 'go': e.preventDefault(); go(d.page); break;
+    case 'join': e.preventDefault(); location.hash = 'join'; break;
+    case 'faction': state.faction = d.faction; go('factions'); break;
+    case 'faction-tab': state.faction = d.faction; renderFactions(); break;
+    case 'auth-tab': state.authTab = d.tab; renderCabinet(); break;
+    case 'apply': applyDialog(d.faction); break;
+    case 'buy': buyDialog(d.id); break;
+    case 'close': closeDialog(); break;
+    case 'logout': api('logout', {}).then(() => { USER = null; renderCabinet(); toast('Ты вышел из аккаунта'); }); break;
+    case 'decide': api('decide', { key: d.key, id: d.id, decision: d.decision }).then(r => {
+      if (!r.ok) return toast(r.error);
+      USER = r.data.user; renderCabinet(); toast(d.decision === 'accepted' ? 'Заявка принята' : 'Заявка отклонена');
+    }); break;
+  }
+});
+
+document.addEventListener('submit', async e => {
+  e.preventDefault();
+  const f = e.target, t = f.dataset.form;
+  if (t === 'login' || t === 'register') return doAuth(f);
+  if (t === 'apply') {
+    const name = f.name.value.trim(), age = parseInt(f.age.value, 10);
+    const err = $('#dlg-err');
+    if (name.length < 5 || !name.includes(' ')) return void (err.textContent = 'Укажи имя и фамилию персонажа.');
+    if (!(age >= 18 && age <= 80)) return void (err.textContent = 'Возраст персонажа: от 18 до 80.');
+    const r = await api('apply', { faction: f.dataset.faction, name, age, about: f.about.value.trim() });
+    if (!r.ok) { err.textContent = r.error; return; }
+    USER = r.data.user; closeDialog(); toast('Заявка отправлена');
+    if (state.page === 'cabinet') renderCabinet();
+  }
+  if (t === 'buy') {
+    const r = await api('buy', { id: f.dataset.id });
+    closeDialog();
+    if (!r.ok) return toast(r.error);
+    USER = r.data.user; toast('Готово: бонус начислен в личном кабинете');
+  }
+});
+
+window.addEventListener('hashchange', route);
+fillConfig();
+loadMe().then(route);
+</script>
+</body>
+</html>
